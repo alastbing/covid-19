@@ -17,18 +17,18 @@ import java.util.*;
 @Service("covid19Service")
 public class Covid19ServiceImpl implements Covid19Service {
 
-    private final static String dxyUrl = "https://ncov.dxy.cn/ncovh5/view/pneumonia";
-    private final static String baiduUrl = "https://voice.baidu.com/act/newpneumonia/newpneumonia";
+    private final static String DXYURL = "https://ncov.dxy.cn/ncovh5/view/pneumonia";
+    private final static String BAIDUURL = "https://voice.baidu.com/act/newpneumonia/newpneumonia";
 
     @Override
     public FeedResult getDxyData() {
         FeedResult rs = new FeedResult();
         try {
             List<Object> list = new ArrayList<>();
-            Map<String, Object> baiduPageMap = new HashMap<>();
+            Map<String, Object> baiduPageMap = new HashMap<>(16);
             Map<String, String> map = new HashMap<String, String>();
             HttpClient client = HttpClientUtil.getHttpClient();
-            HttpUriRequest method = HttpClientUtil.getRequestMethod(map, dxyUrl, "get");
+            HttpUriRequest method = HttpClientUtil.getRequestMethod(map, DXYURL, "get");
             HttpResponse response = client.execute(method);
             if (response != null) {
                 HttpEntity resEntity = response.getEntity();
@@ -43,15 +43,13 @@ public class Covid19ServiceImpl implements Covid19Service {
                                     String json = subData[j].replace("window.", "{\"");
                                     json = json.replace(" = ", "\":");
                                     json = json.replace("catch(e){}</script>", "");
-
-//                                    System.out.println(json);
                                     list.add(JSONArray.parse(json));
                                 }
                             }
                         }
                     }
 
-                    HttpUriRequest baiduMethod = HttpClientUtil.getRequestMethod(map, baiduUrl, "get");
+                    HttpUriRequest baiduMethod = HttpClientUtil.getRequestMethod(map, BAIDUURL, "get");
                     HttpResponse baiduResponse = client.execute(baiduMethod);
                     if (baiduResponse != null) {
                         HttpEntity baiduResEntity = baiduResponse.getEntity();
@@ -61,7 +59,6 @@ public class Covid19ServiceImpl implements Covid19Service {
                             for (int i = 0; i < baiduData.length; i++) {
                                 if (baiduData[i].contains("\"page\":")) {
                                     String[] subBaiduData = baiduData[i].split("</script>");
-//                                    System.out.println(subBaiduData[0]);
                                     baiduPageMap = (Map<String, Object>) JSONArray.parse(subBaiduData[0]);
                                 }
                             }
