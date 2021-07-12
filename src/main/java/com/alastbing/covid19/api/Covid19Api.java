@@ -18,7 +18,7 @@ public class Covid19Api {
 
     @RequestMapping("/covid19")
     @ResponseBody
-    public FeedResult getCovid19Data(HttpSession session) {
+    public FeedResult getCovid19Data() {
         return covid19Service.getDxyData();
     }
 }
