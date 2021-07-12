@@ -26,7 +26,7 @@ public class Covid19ServiceImpl implements Covid19Service {
         try {
             List<Object> list = new ArrayList<>();
             Map<String, Object> baiduPageMap = new HashMap<>(16);
-            Map<String, String> map = new HashMap<String, String>();
+            Map<String, String> map = new HashMap<>();
             HttpClient client = HttpClientUtil.getHttpClient();
             HttpUriRequest method = HttpClientUtil.getRequestMethod(map, DXYURL, "get");
             HttpResponse response = client.execute(method);
